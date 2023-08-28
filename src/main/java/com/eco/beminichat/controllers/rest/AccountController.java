@@ -23,17 +23,17 @@ public class AccountController {
     private final AccountService accountService;
 
 
-    @GetMapping("/find-friends")
-    public ResponseEntity<ResponseObject<ListAccountResponse>> getAccounts(
-            @RequestParam(value = "query", required = false) String query,
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer limit
-    ) {
-
-        Pageable pageable = Pageable.ofSize(limit).withPage(page);
-
-        ListAccountResponse response = accountService.getAccountByQuery(query, pageable);
-
-        return ResponseObjects.getResponseEntity(response, "Get accounts successfully");
-    }
+//    @GetMapping("/find-friends")
+//    public ResponseEntity<ResponseObject<ListAccountResponse>> getAccounts(
+//            @RequestParam(value = "query", required = false) String query,
+//            @RequestParam(value = "page", defaultValue = "0") Integer page,
+//            @RequestParam(value = "size", defaultValue = "10") Integer limit
+//    ) {
+//
+//        Pageable pageable = Pageable.ofSize(limit).withPage(page);
+//
+//        ListAccountResponse response = accountService.getAccountByQuery(query, pageable);
+//
+//        return ResponseObjects.getResponseEntity(response, "Get accounts successfully");
+//    }
 }
