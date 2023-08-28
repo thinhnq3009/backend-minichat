@@ -1,9 +1,13 @@
 spring:
     datasource:
-        url: jdbc:sqlserver://localhost:1433;databaseName=MiniChatDB
-        username: sa
-        password: 123
+        url: jdbc:sqlserver://eu-az-sql-serv1.database.windows.net:1433;databaseName=daqgse4p6zm0j0m
+        username: ub5py3x75glz9b1
+        password: tv6BDtqzBtRW*d&YnhO#Yn13?
         driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#        url: jdbc:sqlserver://localhost:1433;databaseName=MiniChatDB
+#        username: sa
+#        password: 123
+#        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     jpa:
         hibernate:
             ddl-auto: update
