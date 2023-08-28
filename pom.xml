@@ -95,10 +95,12 @@
 				<groupId>com.heroku.sdk</groupId>
 				<artifactId>heroku-maven-plugin</artifactId>
 				<version>3.0.7</version>
-				<appName>be-minichat</appName>
-				<processTypes>
-					<web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.eco.beminichat.BeMiniChatApplication</web>
-				</processTypes>
+				<configuration>
+					<appName>be-minichat</appName>
+					<processTypes>
+						<web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.eco.beminichat.BeMiniChatApplication</web>
+					</processTypes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
