@@ -5,7 +5,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class AuthenticateException extends BadCredentialsException {
+public class AuthenticateException extends BadCredentialsException implements CustomException {
 
     public AuthenticateException(String msg) {
         super(msg);

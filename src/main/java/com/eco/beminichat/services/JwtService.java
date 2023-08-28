@@ -1,9 +1,14 @@
 package com.eco.beminichat.services;
 
+import com.eco.beminichat.dto.AccountDto;
+import com.eco.beminichat.enitities.Account;
+import com.eco.beminichat.mapper.AccountMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +20,28 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@AllArgsConstructor
 public class JwtService {
 
+    private final AccountMapper accountMapper;
+
     private static final String SECRET_KEY = "8A7D6F43A9C2B5E8164F301B89D7E520A431BEDB263EBC0B6C8E9775DB741FC9";
-    private static final int TOKEN_HOUR_LIVE = 1;
+    private static final int TOKEN_HOUR_LIVE = 24;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public AccountDto extractAccountDto(String token) {
+        Claims claims = extractAllClaims(token);
+
+        return AccountDto
+                .builder()
+                .id(claims.get("id", Long.class))
+                .username(claims.getSubject())
+                .displayName(claims.get("displayName", String.class))
+                .avatarUrl(claims.get("avatarUrl", String.class))
+                .build();
     }
 
     public Claims extractAllClaims(String token) {
@@ -47,8 +67,8 @@ public class JwtService {
     public String generateToken(Map<String,Object> maps, UserDetails userDetails) {
         return Jwts
                 .builder()
-                .setSubject(userDetails.getUsername())
                 .setClaims(maps)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_HOUR_LIVE * 60 * 60 * 1000))
                 .signWith(getSignInkey())
@@ -56,7 +76,25 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> claims;
+
+        if (userDetails instanceof Account account) {
+            claims = copyAccountToMap(accountMapper.apply(account));
+        } else {
+            claims = new HashMap<>();
+        }
+
+        return generateToken(claims, userDetails);
+    }
+
+    public Map<String, Object> copyAccountToMap(AccountDto account) {
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("id", account.getId());
+        claims.put("displayName", account.getDisplayName());
+        claims.put("avatarUrl", account.getAvatarUrl());
+
+        return claims;
     }
 
     public boolean validateToken(String token, String username) {

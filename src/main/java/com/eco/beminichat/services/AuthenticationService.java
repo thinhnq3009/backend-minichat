@@ -1,5 +1,6 @@
 package com.eco.beminichat.services;
 
+import com.eco.beminichat.dto.AccountDto;
 import com.eco.beminichat.enitities.Account;
 import com.eco.beminichat.exceptions.AuthenticateException;
 import com.eco.beminichat.mapper.AccountMapper;
@@ -7,6 +8,8 @@ import com.eco.beminichat.repositories.AccountRepository;
 import com.eco.beminichat.request.LoginRequest;
 import com.eco.beminichat.request.RegisterRequest;
 import com.eco.beminichat.response.AuthenticateResponse;
+import com.eco.beminichat.response.RegisterException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,9 +32,20 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
+    private final AccountMapper accountMapper;
+
+    private final HttpServletRequest request;
+
+
     public AuthenticateResponse register(
             @NonNull RegisterRequest request
     ) {
+
+        Optional<Account> existedAccount = accountRepository.findByUsername(request.getUsername());
+
+        if (existedAccount.isPresent()) {
+            throw new RegisterException("Username is already existed");
+        }
 
         Account account = Account
                 .builder()
@@ -40,19 +54,14 @@ public class AuthenticationService {
                 .displayName(request.getDisplayName())
                 .build();
 
-       try {
-           accountRepository.save(account);
-       } catch (Exception  e) {
-           e.printStackTrace();
-           throw new AuthenticateException(e.getMessage());
-       }
+        accountRepository.save(account);
 
-        String token = jwtService.generateToken( account);
+        String token = jwtService.generateToken(account);
 
         AuthenticateResponse response = new AuthenticateResponse();
 
         response.setToken(token);
-        response.setAccountInfo(new AccountMapper().apply(account));
+        response.setUser(accountMapper.apply(account));
 
         return response;
     }
@@ -77,15 +86,34 @@ public class AuthenticationService {
 
         assert account.isPresent();
 
-        String token = jwtService.generateToken( account.get());
+        String token = jwtService.generateToken(account.get());
 
         AuthenticateResponse response = new AuthenticateResponse();
 
         response.setToken(token);
-        response.setAccountInfo(new AccountMapper().apply(account.get()));
+        response.setUser(accountMapper.apply(account.get()));
 
         return response;
     }
 
 
+    public AuthenticateResponse authenticate(String token) {
+        if (token == null || token.isEmpty()) {
+            String header = request.getHeader("Authorization");
+            if (header != null && header.startsWith("Bearer ")) {
+                token = header.substring(7);
+            } else {
+                throw new AuthenticateException("Can't get token from request. Authentication fail");
+            }
+        }
+
+        AccountDto account = jwtService.extractAccountDto(token);
+
+        AuthenticateResponse response = new AuthenticateResponse();
+
+        response.setToken(token);
+        response.setUser(account);
+
+        return response;
+    }
 }

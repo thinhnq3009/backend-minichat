@@ -14,5 +14,7 @@ public  class ResponseObject<T> {
 
     private String status;
 
+    private Integer statusCode;
+
     private T data;
 }

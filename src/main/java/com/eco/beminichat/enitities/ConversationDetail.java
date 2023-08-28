@@ -1,16 +1,23 @@
 package com.eco.beminichat.enitities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Data
+@Getter
+@Setter
+@Builder
 @Entity
 @Table(name = "conversation_detail")
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConversationDetail {
 
+
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

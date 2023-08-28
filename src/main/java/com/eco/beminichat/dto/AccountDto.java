@@ -8,7 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -22,6 +24,8 @@ public class AccountDto {
     private String displayName;
 
     private String avatarUrl;
+
+    private Timestamp lastOnline;
 
     private List<Long> conversationId;
 

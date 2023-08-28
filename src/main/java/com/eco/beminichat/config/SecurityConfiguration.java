@@ -1,5 +1,6 @@
 package com.eco.beminichat.config;
 
+import com.eco.beminichat.auth.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,16 +29,13 @@ public class SecurityConfiguration {
                 .and()
                 .csrf()
                 .disable()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        "api/v1/auth/**",
-                        "api/v1/requires/**",
-                        "api/v1/demo"
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "api/v1/auth/**",
+                                "/socket/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -46,10 +44,8 @@ public class SecurityConfiguration {
         ;
 
 
-
         return http.build();
     }
-
 
 
 }
