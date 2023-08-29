@@ -2,9 +2,6 @@ package com.eco.beminichat.dto;
 
 import lombok.*;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 @Getter
 @Setter
 public class FriendDto extends AccountDto{

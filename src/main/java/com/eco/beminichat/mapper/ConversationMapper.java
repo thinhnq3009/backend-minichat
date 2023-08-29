@@ -56,7 +56,9 @@ public class ConversationMapper implements Function<Conversation, ConversationDt
         conversationDto.setName(conversation.getName());
         conversationDto.setAvatar(conversation.getAvatar(accountService.getAuthenticatedAccount()));
         conversationDto.setLastMessage(
-                messages
+                messages == null
+                        ? null
+                        : messages
                         .stream()
                         .map(messageMapper)
                         .findFirst()

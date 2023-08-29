@@ -1,12 +1,14 @@
 package com.eco.beminichat.services;
 
+import com.eco.beminichat.dto.FriendDto;
 import com.eco.beminichat.enitities.Account;
 import com.eco.beminichat.exceptions.AccountNotFoundException;
 import com.eco.beminichat.exceptions.AuthenticateException;
 import com.eco.beminichat.mapper.AccountMapper;
 //import com.eco.beminichat.mapper.FriendDtoMapper;
+import com.eco.beminichat.mapper.FriendMapper;
 import com.eco.beminichat.repositories.AccountRepository;
-import com.eco.beminichat.response.ListAccountResponse;
+import com.eco.beminichat.response.FindFriendResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -25,8 +27,6 @@ public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
 
-    private final AccountMapper accountMapper;
-//    private final FriendDtoMapper friendDtoMapper;
 
     public Account getAuthenticatedAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,21 +42,30 @@ public class AccountService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-//    public ListAccountResponse getAccountByQuery(String query, Pageable pageable) {
-//        query = query.toLowerCase();
-//        List<Account> accounts = accountRepository.findAccountContain(query, query, pageable);
 
-//        if (accounts.isEmpty()) {
-//            throw new AccountNotFoundException("Don't have any account contains \"%s\"".formatted(query));
-//        }
+    public FindFriendResponse getAccountByQuery(String query, Pageable pageable) {
+        query = query.toLowerCase();
+        List<Account> accounts = accountRepository.findAccountContain(
+                query,
+                query,
+                getAuthenticatedAccount(),
+                pageable);
 
-//        return new ListAccountResponse(
-//                accounts
-//                        .stream()
-//                        .map(friendDtoMapper)
-//                        .collect(Collectors.toList())
-//        );
-//    }
+        if (accounts.isEmpty()) {
+            throw new AccountNotFoundException("Don't have any account contains \"%s\"".formatted(query));
+        }
+
+        FriendMapper friendMapper = new FriendMapper(new AccountMapper(), this);
+
+        return new FindFriendResponse(
+                accounts
+                        .stream()
+                        .filter(account -> !account.equals(getAuthenticatedAccount()))
+                        .map(friendMapper)
+                        .filter(FriendDto::isNotFriend)
+                        .collect(Collectors.toList())
+        );
+    }
 
     public Account getAccountById(Long id) {
         return accountRepository.findById(id)

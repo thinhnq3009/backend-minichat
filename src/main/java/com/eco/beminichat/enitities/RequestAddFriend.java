@@ -1,5 +1,6 @@
 package com.eco.beminichat.enitities;
 
+import com.eco.beminichat.enums.TypeNotification;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,7 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "request_add_friend")
-public class RequestAddFriend  {
+public class RequestAddFriend implements Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,4 +44,18 @@ public class RequestAddFriend  {
         }
     }
 
+    @Override
+    public String getContent() {
+        return "%s sent you a friend request".formatted(sender.getDisplayName());
+    }
+
+    @Override
+    public String getPosterUrl() {
+        return getSender().getAvatarUrl();
+    }
+
+    @Override
+    public TypeNotification getTypeNotification() {
+        return TypeNotification.REQUEST_ADD_FRIEND;
+    }
 }

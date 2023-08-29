@@ -1,6 +1,6 @@
-package com.eco.beminichat;
+package com.eco.beminichat.enums;
 
 public enum TypeNotification {
-    ADD_FRIEND,
+    REQUEST_ADD_FRIEND,
     SIMPLE_NOTIFICATION
 }

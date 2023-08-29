@@ -7,7 +7,6 @@ import com.eco.beminichat.enitities.Message;
 import com.eco.beminichat.exceptions.ConversationDenyAssessException;
 import com.eco.beminichat.exceptions.ConversationNotFoundException;
 import com.eco.beminichat.mapper.AccountConversationMapper;
-import com.eco.beminichat.mapper.AccountMapper;
 import com.eco.beminichat.mapper.MessageMapper;
 import com.eco.beminichat.repositories.MessageRepository;
 import com.eco.beminichat.request.MessageRequest;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ConcurrentModificationException;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor

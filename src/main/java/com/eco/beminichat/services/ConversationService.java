@@ -2,17 +2,14 @@ package com.eco.beminichat.services;
 
 import com.eco.beminichat.enitities.Account;
 import com.eco.beminichat.enitities.Conversation;
-import com.eco.beminichat.enitities.ConversationDetail;
 import com.eco.beminichat.mapper.ConversationMapper;
 import com.eco.beminichat.repositories.ConversationRepository;
 import com.eco.beminichat.response.ConversationResponse;
-import com.eco.beminichat.values.DefaultValue;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -60,7 +57,7 @@ public class ConversationService {
     }
 
 
-    public void createConversation(
+    public Conversation createConversation(
             boolean isGroup,
             Account... members
     ) {
@@ -86,7 +83,7 @@ public class ConversationService {
                 )
         );
 
-        conversationRepository.save(conversation);
+       return conversationRepository.save(conversation);
 
     }
 }

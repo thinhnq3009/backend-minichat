@@ -1,32 +1,41 @@
 package com.eco.beminichat.services;
 
+import com.eco.beminichat.dto.ConversationDto;
 import com.eco.beminichat.dto.RequestAddFriendDto;
 import com.eco.beminichat.enitities.Account;
 import com.eco.beminichat.enitities.Conversation;
 import com.eco.beminichat.enitities.RequestAddFriend;
 import com.eco.beminichat.exceptions.RequestAddFriendException;
+import com.eco.beminichat.mapper.ConversationMapper;
+import com.eco.beminichat.mapper.NotificationMapper;
 import com.eco.beminichat.mapper.RequestAddFriendMapper;
 import com.eco.beminichat.repositories.RequestAddFriendRepository;
-import lombok.AllArgsConstructor;
+import com.eco.beminichat.response.NotificationResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RequestAddFriendService {
 
     private final AccountService accountService;
 
     private final ConversationService conversationService;
 
+    private final ConversationMapper conversationMapper;
+
     private final RequestAddFriendRepository addFriendRepository;
 
     private final SimpMessagingTemplate messagingTemplate;
 
     private final RequestAddFriendMapper requestAddFriendMapper;
+
+    private final NotificationMapper notificationMapper;
 
     public RequestAddFriend createRequest(Long receiverId) {
 
@@ -63,7 +72,7 @@ public class RequestAddFriendService {
         return request;
     }
 
-    public void acceptRequest(Long requestId) {
+    public ConversationDto acceptRequest(Long requestId) {
         RequestAddFriend request = addFriendRepository
                 .findById(requestId)
                 .orElseThrow(
@@ -81,7 +90,7 @@ public class RequestAddFriendService {
         }
 
 
-        conversationService.createConversation(
+     Conversation conversation = conversationService.createConversation(
                false,
                 request.getSender(),
                 request.getReceiver()
@@ -91,6 +100,9 @@ public class RequestAddFriendService {
         request.setAccepted(true);
 
         addFriendRepository.save(request);
+
+        return conversationMapper.apply(conversation);
+
     }
 
     public RequestAddFriendDto getRequest(Long requestId) {
@@ -99,5 +111,37 @@ public class RequestAddFriendService {
                 .orElseThrow(
                         () -> new RequestAddFriendException("Request add friend not found")
                 );
+    }
+
+    public NotificationResponse getAllRequest(Pageable pageable) {
+
+        Account loggedUser = accountService.getAuthenticatedAccount();
+
+        Page<RequestAddFriend> requestFriends = addFriendRepository.findByReceiverAndAcceptedFalse(loggedUser, pageable);
+
+        return new NotificationResponse(
+                requestFriends
+                        .stream()
+                        .map(notificationMapper)
+                        .collect(Collectors.toList())
+        );
+
+    }
+
+    public void deleteRequest(Long requestId) {
+
+        RequestAddFriend addFriend = addFriendRepository.findById(requestId)
+                .orElseThrow(
+                        () -> new RequestAddFriendException("Request add friend not found")
+                );
+
+        Account loggedUser = accountService.getAuthenticatedAccount();
+
+        if (!addFriend.getReceiver().equals(loggedUser)) {
+            throw new RequestAddFriendException("You can't delete this request");
+        }
+
+        addFriendRepository.delete(addFriend);
+
     }
 }
