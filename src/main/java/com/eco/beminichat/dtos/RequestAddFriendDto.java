@@ -1,6 +1,7 @@
 package com.eco.beminichat.dto;
 
 import com.eco.beminichat.enitities.Account;
+import com.eco.beminichat.response.base.ResponseEnable;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,7 @@ import java.sql.Timestamp;
 
 @Data
 @Builder
-public class RequestAddFriendDto {
+public class RequestAddFriendDto implements ResponseEnable {
 
     private Long id;
 
