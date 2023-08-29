@@ -14,7 +14,11 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query("""
             select a from Account a
-            where upper(a.username) like upper(concat('%', ?1, '%')) or upper(a.displayName) like upper(concat('%', ?2, '%'))""")
-    List<Account> findAccountContain(String username, String fullName, Pageable pageable);
+            where
+            (upper(a.username) like upper(concat('%', ?1, '%'))
+            or
+            upper(a.displayName) like upper(concat('%', ?2, '%')))
+            """)
+    List<Account> findAccountContain(String username, String fullName, Account account, Pageable pageable);
 
 }

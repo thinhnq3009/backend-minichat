@@ -1,6 +1,7 @@
 package com.eco.beminichat.config;
 
 import com.eco.beminichat.exceptions.CustomException;
+import com.eco.beminichat.response.base.ResponseEnable;
 import com.eco.beminichat.response.base.ResponseObject;
 import com.eco.beminichat.services.AccountService;
 import com.eco.beminichat.services.JwtService;
@@ -93,7 +94,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void handlerException(HttpServletResponse response, String message, HttpStatus status) {
         try {
-            ResponseObject<Object> responseObject = ResponseObject
+            ResponseObject<ResponseEnable> responseObject = ResponseObject
                     .builder()
                     .message(message)
                     .status(status.getReasonPhrase())

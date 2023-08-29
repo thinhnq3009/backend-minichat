@@ -9,6 +9,7 @@ import com.eco.beminichat.request.LoginRequest;
 import com.eco.beminichat.request.RegisterRequest;
 import com.eco.beminichat.response.AuthenticateResponse;
 import com.eco.beminichat.response.RegisterException;
+import com.eco.beminichat.util.avatar.AvatarGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -36,6 +37,7 @@ public class AuthenticationService {
 
     private final HttpServletRequest request;
 
+    private final AvatarGenerator avatarGenerator;
 
     public AuthenticateResponse register(
             @NonNull RegisterRequest request
@@ -50,6 +52,7 @@ public class AuthenticationService {
         Account account = Account
                 .builder()
                 .username(request.getUsername())
+                .avatarUrl(avatarGenerator.generate(request.getDisplayName()))
                 .password(passwordEncoder.encode(request.getPassword()))
                 .displayName(request.getDisplayName())
                 .build();

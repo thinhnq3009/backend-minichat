@@ -27,17 +27,10 @@ public class AuthenticateController {
             @RequestBody LoginRequest request
     ) {
 
-        try {
-            AuthenticateResponse response = authenticationService.login(request);
+        AuthenticateResponse response = authenticationService.login(request);
 
-            return ResponseObjects.getResponseEntity(response);
-        } catch (AuthenticateException e) {
-            e.printStackTrace();
-            return ResponseObjects.getResponseEntity(null, e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseObjects.getResponseEntity(null, "Login fail", HttpStatus.BAD_REQUEST);
-        }
+        return ResponseObjects.getResponseEntity(response);
+
 
     }
 

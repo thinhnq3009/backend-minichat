@@ -1,7 +1,5 @@
 package com.eco.beminichat.config;
 
-import com.eco.beminichat.dto.AccountDto;
-import com.eco.beminichat.enitities.Account;
 import com.eco.beminichat.services.AccountService;
 import com.eco.beminichat.services.JwtService;
 import lombok.AllArgsConstructor;
@@ -17,12 +15,9 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.socket.config.annotation.*;
 
-import java.lang.annotation.Annotation;
-import java.security.Principal;
 import java.util.List;
 
 @Configuration

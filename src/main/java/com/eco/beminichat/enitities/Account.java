@@ -52,8 +52,9 @@ public class Account implements UserDetails, DataTransferObjectEnable<AccountDto
     @OneToMany(mappedBy = "owner")
     private List<SimpleNotification> simpleNotifications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "receiver")
-    private List<RequestAddFriend> requestAddFriends = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)
+    private List<RequestAddFriend> requestAddFriendsSent = new ArrayList<>();
 
     @PrePersist
     protected void setDefaultValues() {

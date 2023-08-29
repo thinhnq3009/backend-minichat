@@ -1,9 +1,6 @@
 package com.eco.beminichat.dto;
 
-import com.eco.beminichat.enitities.Account;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter

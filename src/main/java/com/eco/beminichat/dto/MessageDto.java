@@ -1,9 +1,7 @@
 package com.eco.beminichat.dto;
 
 import com.eco.beminichat.response.base.ResponseEnable;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.sql.Timestamp;
 

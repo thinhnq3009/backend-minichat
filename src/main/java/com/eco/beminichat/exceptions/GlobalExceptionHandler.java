@@ -1,6 +1,7 @@
 package com.eco.beminichat.exceptions;
 
 import com.eco.beminichat.response.RegisterException;
+import com.eco.beminichat.response.base.ResponseEnable;
 import com.eco.beminichat.response.base.ResponseObject;
 import com.eco.beminichat.response.base.ResponseObjects;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -32,46 +33,46 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseObject<Object>> handleException(Exception ex) {
+    public ResponseEntity<ResponseObject<ResponseEnable>> handleException(Exception ex) {
         logBug(ex);
         return ResponseObjects
                 .getResponseEntity(null, ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AuthenticateException.class)
-    public ResponseEntity<ResponseObject<Object>> handleAuthenticateException(Exception ex) {
+    public ResponseEntity<ResponseObject<ResponseEnable>> handleAuthenticateException(Exception ex) {
         logBug(ex);
         return ResponseObjects
                 .getResponseEntity(null, ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ResponseObject<Object>> handleExpiredJwtException(Exception ex) {
+    public ResponseEntity<ResponseObject<ResponseEnable>> handleExpiredJwtException(Exception ex) {
         logBug(ex);
         return ResponseObjects
                 .getResponseEntity(null, ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ConversationDenyAssessException.class)
-    public ResponseEntity<ResponseObject<Object>> handleConversationDenyAssessException(Exception ex) {
+    public ResponseEntity<ResponseObject<ResponseEnable>> handleConversationDenyAssessException(Exception ex) {
         logBug(ex);
         return ResponseObjects
                 .getResponseEntity(null, ex.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(RegisterException.class)
-    public ResponseEntity<ResponseObject<Object>> handleRegisterException(Exception ex) {
+    public ResponseEntity<ResponseObject<ResponseEnable>> handleRegisterException(Exception ex) {
         logBug(ex);
         return ResponseObjects
                 .getResponseEntity(null, ex.getMessage(), HttpStatus.NOT_IMPLEMENTED);
     }
     @ExceptionHandler(AccountNotFoundException.class)
-    public ResponseEntity<ResponseObject<Object>> handleAccountNotFoundException(Exception ex) {
+    public ResponseEntity<ResponseObject<ResponseEnable>> handleAccountNotFoundException(Exception ex) {
         logBug(ex);
         return ResponseObjects
                 .getResponseEntity(null, ex.getMessage(), HttpStatus.NOT_FOUND);
     }@ExceptionHandler(RequestAddFriendException.class)
-    public ResponseEntity<ResponseObject<Object>> handleRequestAddFriendException(Exception ex) {
+    public ResponseEntity<ResponseObject<ResponseEnable>> handleRequestAddFriendException(Exception ex) {
         logBug(ex);
         return ResponseObjects
                 .getResponseEntity(null, ex.getMessage(), HttpStatus.NOT_IMPLEMENTED);

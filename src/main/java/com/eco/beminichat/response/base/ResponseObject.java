@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public  class ResponseObject<T> {
+public  class ResponseObject<T extends  ResponseEnable> {
     private String message;
 
     private String status;
