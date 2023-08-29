@@ -40,7 +40,7 @@ public class SocketConfiguration implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/socket")
-                .setAllowedOrigins("http://localhost:3000")
+                .setAllowedOrigins("http://mini-chat.quocthinhtme.studio")
                 .withSockJS();
     }
 
